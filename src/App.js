@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import axios from 'axios';
+import Alunos from "./components/Alunos";
+import "./assets/App.css";
+import './assets/index.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const api = 'http://127.0.0.1:3003/alunos'; //subrotas .env config rotas
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+export default class App extends Component {
+
+  constructor(){
+    super();
+    this.state = {
+      aluno:{}
+    };
+  }
+
+  criarAluno(aluno){
+    this.setState(aluno);
+    axios.post(api, aluno).then( result => {
+      alert(result.res);
+      //this.setState({aluno}) - retorna o aluno com id
+    });
+  };
+
+  render(){
+    return (
+      <section className="conteudo"> 
+        <Alunos criarAluno = {this.criarAluno.bind(this)} aluno={this.state.aluno}/>
+      </section>
+    );
+  }
 }
 
-export default App;
